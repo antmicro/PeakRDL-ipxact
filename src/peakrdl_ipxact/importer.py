@@ -438,10 +438,11 @@ class IPXACTImporter(RDLImporter):
             inst_name, self.AU_to_bytes(d['baseAddress'])
         )
 
-        memwidth = self.parse_integer(subspaceMap.find(self.ns+'baseAddress').get(self.ns+'maximum')) - d['baseAddress']
+        memwidth = self.parse_integer(subspaceMap.find(self.ns+'baseAddress').get(self.ns+'maximum')) - d['baseAddress'] + 1
         M_def = self.create_mem_definition()
         M = self.instantiate_mem(M_def, 'PLACEHOLDER_MEM', 0)
-        self.assign_property(M, 'memwidth', memwidth)
+        self.assign_property(M, 'mementries', memwidth)
+        self.assign_property(M, 'memwidth', 8)
         self.add_child(C, M)
 
         return C

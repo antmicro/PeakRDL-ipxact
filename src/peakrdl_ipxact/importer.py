@@ -119,9 +119,12 @@ class IPXACTImporter(RDLImporter):
     def get_all_addressSpace(self, component: ElementTree.ElementTree) -> List[ElementTree.Element]:
         # Find <addressSpaces>
         addressSpaces_s = component.findall(self.ns+"addressSpaces")
-        if len(addressSpaces_s) != 1:
+        if len(addressSpaces_s) == 0:
+            return []
+
+        if len(addressSpaces_s) > 1:
             self.msg.fatal(
-                "'component' must contain exactly one 'addressSpaces' element",
+                "'component' must contain zero or more 'addressSpaces' element",
                 self.src_ref
             )
         memoryMaps = addressSpaces_s[0]

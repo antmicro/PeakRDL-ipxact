@@ -61,7 +61,6 @@ class IPXACTImporter(RDLImporter):
         component = self.get_component(tree)
 
         memoryMaps = self.get_all_memoryMap(component)
-        self.busMasters = self.get_all_busInterfaces(component, True)
         self.addressSpaces = self.get_all_addressSpace(component)
 
         rootC = None if not top_name else self.create_addrmap_definition(top_name)

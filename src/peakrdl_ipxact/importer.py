@@ -422,17 +422,18 @@ class IPXACTImporter(RDLImporter):
         C_def = self.create_addrmap_definition(type_name)
 
         inst_name = subspaceMap.get(self.ns+'masterRef')
-        if inst_name in inst_uniq_names:
-            name_parts = inst_name.split('_')
-            number_suffix =  name_parts[-1]
+        init_inst_name = inst_name
+        while inst_name in inst_uniq_names:
+            inst_uniq_names.add(inst_name)
+            name, number_suffix = inst_name.rsplit('_', 1)
             if number_suffix.isnumeric():
                 number_suffix = int(number_suffix) + 1
             else:
+                name = inst_name
                 number_suffix = 1
-
-            new_name = '_'.join(name_parts) + '_' + str(number_suffix)
-            self.msg.warning(f'Duplicate entry named {inst_name}, will be automatically renamed to {new_name}')
-            inst_name = new_name
+            inst_name = f"{name}_{number_suffix}"
+        if init_inst_name != inst_name:
+            self.msg.warning(f'Duplicate entry named {init_inst_name}, will be automatically renamed to {inst_name}')
         inst_uniq_names.add(inst_name)
 
         C = self.instantiate_addrmap(
